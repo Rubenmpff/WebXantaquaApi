@@ -12,6 +12,7 @@ public class Client
     public bool ConsentForAdvertising { get; set; } // Indica se o cliente deu consentimento para receber publicidade.
     public ICollection<Project> Projects { get; set; } = new List<Project>(); // Coleção de projetos associados a este cliente.
 
+    //aaa
 
     // Construtor para facilitar a criação de um novo cliente com informações básicas.
     public Client(string name, string email, string phone)
