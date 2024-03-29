@@ -8,4 +8,10 @@
     <ProjectReference Include="..\WebKrpcApi.Infra.Data\WebKrpcApi.Infra.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Mapping\AutoMapper\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mapping\AutoMapper\" />
+  </ItemGroup>
 </Project>
