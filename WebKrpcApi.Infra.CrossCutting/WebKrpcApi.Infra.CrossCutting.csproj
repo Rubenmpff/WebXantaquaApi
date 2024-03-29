@@ -10,7 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebKrpcApi.Infra.Data\WebKrpcApi.Infra.Data.csproj" />
+    <ProjectReference Include="..\WebKrpcApi.Services\WebKrpcApi.Services.csproj" />
   </ItemGroup>
-
 </Project>
