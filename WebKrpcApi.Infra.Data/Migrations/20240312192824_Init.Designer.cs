@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace WebKrpcApi.Infra.Data.Migrations
 {
-    [DbContext(typeof(WebKrpcDbContext))]
+    [DbContext(typeof(WebKrpcApiDBContext))]
     [Migration("20240312192824_Init")]
     partial class Init
     {

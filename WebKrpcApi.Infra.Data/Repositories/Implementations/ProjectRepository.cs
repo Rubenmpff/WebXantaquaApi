@@ -48,4 +48,3 @@ namespace WebKrpcApi.Infra.Data.Repositories.Implementations
 
     }
 }
-}

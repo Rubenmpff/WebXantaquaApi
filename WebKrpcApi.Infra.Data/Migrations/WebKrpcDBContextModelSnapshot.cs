@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace WebKrpcApi.Infra.Data.Migrations
 {
-    [DbContext(typeof(WebKrpcDbContext))]
+    [DbContext(typeof(WebKrpcApiDBContext))]
     partial class WebKrpcDBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
