@@ -6,39 +6,39 @@ using WebKrpcApi.Services.Services.Interfaces;
 namespace WebKrpcApi.Controllers
 {
     [Route("WebKrpcApi/[controller]")]
-    // WebKrpcApi/Client
+    // WebKrpcApi/budget
     [ApiController]
-    public class ClientController : ControllerBase
+    public class BudgetController : ControllerBase
     {
-        private readonly IClientService _service;
+        private readonly IBudgetService _service;
 
-        public ClientController(IClientService clientService)
+        public BudgetController(IBudgetService budgetService)
         {
-            _service = clientService;
+            _service = budgetService;
         }
 
         [HttpGet]
-        public List<ClientDto> GetAll()
+        public List<BudgetDto> GetAll()
         {
             return _service.GetAll().Result;
         }
 
         [HttpGet("{id}")]
-        public ClientDto GetClient(int id)
+        public BudgetDto GetClient(int id)
         {
             return _service.GetById(id).Result;
         }
 
         [HttpPost]
-        public ClientDto Save(ClientDto clientDto)
+        public BudgetDto Save(BudgetDto budgetDto)
         {
-            return _service.Save(clientDto).Result;
+            return _service.Save(budgetDto).Result;
         }
 
         [HttpDelete]
-        public void Delete(ClientDto clientDto)
+        public void Delete(BudgetDto budgetDto)
         {
-            _service.Delete(clientDto);
+            _service.Delete(budgetDto);
         }
     }
 }

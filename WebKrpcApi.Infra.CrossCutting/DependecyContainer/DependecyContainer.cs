@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Krpc.Data.Context;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebKrpcApi.Infra.Data.Repositories.Implementations;
 using WebKrpcApi.Infra.Data.Repositories.Interfaces;
@@ -12,6 +13,7 @@ namespace WebKrpcApi.Infra.CrossCutting.DependecyContainer
     {
         public static void AddApiConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<WebKrpcApiDBContext>();
             services.AddAutoMapper(typeof(AutoMapperConfig));
 
             services.RegisterRepositories();
