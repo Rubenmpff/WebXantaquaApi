@@ -27,11 +27,13 @@ namespace WebKrpcApi
             services.AddControllers();
             services.AddSwaggerGen(opcions =>
             {
-                opcions.SwaggerDoc("WebKrpcApi", new Microsoft.OpenApi.Models.OpenApiInfo()
-                {
+                opcions.SwaggerDoc(
+                    "WebKrpcApi",
+                    new Microsoft.OpenApi.Models.OpenApiInfo()
+                    {
                     Title = "Web Krpc",
                     Version = "1.0"
-                });
+                    });
             }
             );
         }
