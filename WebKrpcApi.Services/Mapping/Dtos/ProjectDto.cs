@@ -6,33 +6,25 @@ namespace WebKrpcApi.Services.Mapping.Dtos
     // Representa um projeto associado a um cliente.
     public class ProjectDto
     {
-        public int Id { get; set; } // Identificador único do projeto.
-        public string Name { get; set; } // Nome ou título do projeto.
-        public string Description { get; set; } // Descrição detalhada do projeto.
-        public ProjectStatus Status { get; set; } // Status atual do projeto.
-        public DateTime StartDate { get; set; } // Data de início do projeto.
-        public DateTime? EstimatedEndDate { get; set; } // Data estimada para a conclusão do projeto, pode ser nula se não estiver definida.
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public ProjectStatus Status { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime? EstimatedEndDate { get; set; }
 
+        // Referência ao ID do cliente, não o objeto inteiro para evitar referências circulares
+        public int ClientId { get; set; }
 
-        public ClientDto Client { get; set; } // Propriedade de navegação para o cliente associado.
-        public ICollection<BudgetDto> Budgets { get; set; } = new List<BudgetDto>(); // Coleção de orçamentos relacionados a este projeto.
-
-        // Construtor para criar um projeto com informações iniciais.
-        public ProjectDto(string name, string description, DateTime startDate)
-        {
-            Name = name;
-            Description = description;
-            StartDate = startDate;
-            Status = ProjectStatus.Planning; // Status inicial do projeto definido como Planejamento.
-        }
+        // Uma lista de IDs de orçamentos em vez de objetos de orçamento completos
+        public List<int> BudgetIds { get; set; } = new List<int>();
     }
 
-    // Define os possíveis estados de um projeto.
     public enum ProjectStatus
     {
-        Planning, // Planejamento
-        InProgress, // Em andamento
-        Completed, // Concluído
-        Canceled // Cancelado
+        Planning,
+        InProgress,
+        Completed,
+        Canceled
     }
 }
