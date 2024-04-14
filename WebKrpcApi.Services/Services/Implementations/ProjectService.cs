@@ -11,14 +11,18 @@ namespace WebKrpcApi.Services.Services.Implementations
     public class ProjectService : IProjectService
     {
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
         private readonly IProjectRepository _repository;
         private readonly WebKrpcApiDBContext _context;
 
-        public ProjectService(IMapper mapper, IProjectRepository repository, WebKrpcApiDBContext context)
+
+        public ProjectService(IMapper mapper, IProjectRepository repository, WebKrpcApiDBContext context, IEmailService emailService)
         {
             _mapper = mapper;
             _context = context;
             _repository = repository;
+            _emailService = emailService; // Guarda a referência ao serviço de e-mail
+
         }
 
         public async Task<List<ProjectDto>> GetAll()
@@ -46,10 +50,17 @@ namespace WebKrpcApi.Services.Services.Implementations
             else
             {
                 _repository.Add(project);
+                // Após adicionar o projeto, vamos enviar um e-mail
+                await _context.SaveChangesAsync(); // Garante que o projeto seja guardado antes de enviar o e-mail
+                await _emailService.SendEmailAsync(new EmailRequest
+                {
+                    To = "email@exemplo.com",
+                    Subject = "Novo Projeto Criado",
+                    Body = $"Um novo projeto foi criado: {projectDto.Name}"
+                });
             }
 
-            await _context.SaveChangesAsync();
-
+            // Se você desejar retornar o DTO atualizado com o ID (se for um novo projeto)
             return _mapper.Map<ProjectDto>(project);
         }
 

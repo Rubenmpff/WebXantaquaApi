@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebKrpcApi.Services.Mapping.Dtos;
 using WebKrpcApi.Services.Services.Interfaces;
 
 namespace WebKrpcApi.Controllers
 {
-    [Route("WebKrpcApi/[controller]")]
-    // WebKrpcApi/budget
+    [Route("api/[controller]")]
     [ApiController]
     public class ProjectController : ControllerBase
     {
@@ -18,27 +18,69 @@ namespace WebKrpcApi.Controllers
         }
 
         [HttpGet]
-        public List<ProjectDto> GetAll()
+        public async Task<ActionResult<List<ProjectDto>>> GetAll()
         {
-            return _service.GetAll().Result;
+            try
+            {
+                var projects = await _service.GetAll();
+                return Ok(projects);
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpGet("{id}")]
-        public ProjectDto GetClient(int id)
+        public async Task<ActionResult<ProjectDto>> GetProject(int id)
         {
-            return _service.GetById(id).Result;
+            try
+            {
+                var project = await _service.GetById(id);
+                if (project == null)
+                    return NotFound();
+
+                return Ok(project);
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPost]
-        public ProjectDto Save(ProjectDto projectDto)
+        public async Task<ActionResult<ProjectDto>> Save([FromBody] ProjectDto projectDto)
         {
-            return _service.Save(projectDto).Result;
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var createdProject = await _service.Save(projectDto);
+                return CreatedAtAction(nameof(GetProject), new { id = createdProject.Id }, createdProject);
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        [HttpDelete]
-        public void Delete(ProjectDto projectDto)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            _service.Delete(projectDto);
+            try
+            {
+                var project = await _service.GetById(id);
+                if (project == null)
+                    return NotFound();
+
+                await _service.Delete(project);
+                return NoContent();
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }

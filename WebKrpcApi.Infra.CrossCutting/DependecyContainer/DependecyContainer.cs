@@ -32,6 +32,9 @@ namespace WebKrpcApi.Infra.CrossCutting.DependecyContainer
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IBudgetService, BudgetService>();
             services.AddScoped<IProjectService, ProjectService>();
+
+            services.AddSingleton<IEmailService, EmailService>();
+
         }
     }
 }

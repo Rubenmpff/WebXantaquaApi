@@ -12,6 +12,8 @@ namespace WebKrpcApi.Services.Mapping.Dtos
         public string Phone { get; set; }
         public bool AgreedToTermsAndConditions { get; set; }
         public bool ConsentForAdvertising { get; set; }
+        public string Password { get; set; }  // Usado apenas para login e registro
+        public string Token { get; set; }  // JWT token para autenticação
 
 
         // Uma lista de IDs de projetos em vez de objetos de projeto completos

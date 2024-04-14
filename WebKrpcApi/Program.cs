@@ -1,11 +1,8 @@
+using Azure.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebKrpcApi
 {
@@ -18,9 +15,21 @@ namespace WebKrpcApi
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
+
+            .ConfigureAppConfiguration((context, config) =>
+            {
+                var builtConfig = config.Build();
+
+                var azureCredential = new DefaultAzureCredential();
+
+                config.AddAzureKeyVault(
+                    new Uri($"https://{builtConfig["AzureKeyVault:Vault"]}.vault.azure.net/"),
+                    azureCredential);
+            })
+                
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
                     webBuilder.UseStartup<Startup>();
-                });
+            });
     }
 }
