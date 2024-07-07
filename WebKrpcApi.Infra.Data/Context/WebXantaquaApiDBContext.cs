@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Krpc.Data.Context
 {
-    public class WebKrpcApiDBContext : IdentityDbContext<Client>
+    public class WebXantaquaApiDBContext : IdentityDbContext<Client>
     {
         public DbSet<Client> Clients { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Budget> Budgets { get; set; }
 
-        public WebKrpcApiDBContext(DbContextOptions<WebKrpcApiDBContext> options)
+        public WebXantaquaApiDBContext(DbContextOptions<WebXantaquaApiDBContext> options)
             : base(options)
         {
         }

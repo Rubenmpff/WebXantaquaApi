@@ -9,10 +9,10 @@ namespace WebKrpcApi.Infra.Data.Repositories.Implementations
 {
     public class ClientRepository : IClientRepository
     {
-        private readonly WebKrpcApiDBContext _context;
+        private readonly WebXantaquaApiDBContext _context;
         private readonly DbSet<Client> _dbSet;
 
-        public ClientRepository(WebKrpcApiDBContext context)
+        public ClientRepository(WebXantaquaApiDBContext context)
         {
             _context = context;
             _dbSet = context.Set<Client>();

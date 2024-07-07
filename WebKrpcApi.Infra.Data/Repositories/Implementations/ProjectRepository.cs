@@ -8,10 +8,10 @@ namespace WebKrpcApi.Infra.Data.Repositories.Implementations
 {
     public class ProjectRepository : IProjectRepository
     {
-        private readonly WebKrpcApiDBContext _context;
+        private readonly WebXantaquaApiDBContext _context;
         private readonly DbSet<Project> _dbSet;
 
-        public ProjectRepository(WebKrpcApiDBContext context)
+        public ProjectRepository(WebXantaquaApiDBContext context)
         {
             _context = context;
             _dbSet = context.Set<Project>();

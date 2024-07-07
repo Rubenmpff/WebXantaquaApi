@@ -5,9 +5,9 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 
 
-public class WebDBContextFactory : IDesignTimeDbContextFactory<WebKrpcApiDBContext>
+public class WebDBContextFactory : IDesignTimeDbContextFactory<WebXantaquaApiDBContext>
 {
-    public WebKrpcApiDBContext CreateDbContext(string[] args)
+    public WebXantaquaApiDBContext CreateDbContext(string[] args)
     {
         // Ajuste o caminho para apontar para o diretório do projeto "WebKrpcApi"
         var basePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../WebKrpcApi"));
@@ -16,9 +16,9 @@ public class WebDBContextFactory : IDesignTimeDbContextFactory<WebKrpcApiDBConte
             .AddJsonFile("appsettings.json")
             .Build();
 
-        var builder = new DbContextOptionsBuilder<WebKrpcApiDBContext>();
+        var builder = new DbContextOptionsBuilder<WebXantaquaApiDBContext>();
         builder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
 
-        return new WebKrpcApiDBContext(builder.Options);
+        return new WebXantaquaApiDBContext(builder.Options);
     }
 }

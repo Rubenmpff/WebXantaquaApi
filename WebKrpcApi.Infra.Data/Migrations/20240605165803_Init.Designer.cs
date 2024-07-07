@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace WebKrpcApi.Infra.Data.Migrations
 {
-    [DbContext(typeof(WebKrpcApiDBContext))]
+    [DbContext(typeof(WebXantaquaApiDBContext))]
     [Migration("20240605165803_Init")]
     partial class Init
     {

@@ -9,10 +9,10 @@ namespace WebKrpcApi.Infra.Data.Repositories.Implementations
 {
     public class PhotoRepository : IPhotoRepository
     {
-        private readonly WebKrpcApiDBContext _context;
+        private readonly WebXantaquaApiDBContext _context;
         private readonly DbSet<Photo> _dbSet;
 
-        public PhotoRepository(WebKrpcApiDBContext context)
+        public PhotoRepository(WebXantaquaApiDBContext context)
         {
             _context = context;
             _dbSet = context.Set<Photo>();

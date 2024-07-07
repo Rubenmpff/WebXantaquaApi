@@ -9,10 +9,10 @@ namespace WebKrpcApi.Infra.Data.Repositories.Implementations
 {
     public class CommentRepository : ICommentRepository
     {
-        private readonly WebKrpcApiDBContext _context;
+        private readonly WebXantaquaApiDBContext _context;
         private readonly DbSet<Comment> _dbSet;
 
-        public CommentRepository(WebKrpcApiDBContext context)
+        public CommentRepository(WebXantaquaApiDBContext context)
         {
             _context = context;
             _dbSet = context.Set<Comment>();

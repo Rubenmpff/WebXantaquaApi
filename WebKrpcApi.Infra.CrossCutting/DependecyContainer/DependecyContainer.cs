@@ -29,7 +29,7 @@ namespace WebKrpcApi.Infra.CrossCutting.DependecyContainer
 
             // Registro e configuração do Identity
             services.AddIdentity<Client, IdentityRole>()
-                    .AddEntityFrameworkStores<WebKrpcApiDBContext>()
+                    .AddEntityFrameworkStores<WebXantaquaApiDBContext>()
                     .AddDefaultTokenProviders();
 
             // Adiciona a configuração fortemente tipada usando IOptions
@@ -48,7 +48,7 @@ namespace WebKrpcApi.Infra.CrossCutting.DependecyContainer
             services.AddScoped<IPhotoRepository, PhotoRepository>();
 
             // Configurar o UserManager com Client
-            services.AddScoped<IUserStore<Client>, UserStore<Client, IdentityRole, WebKrpcApiDBContext>>();
+            services.AddScoped<IUserStore<Client>, UserStore<Client, IdentityRole, WebXantaquaApiDBContext>>();
             services.AddScoped<UserManager<Client>>();
         }
 

@@ -25,7 +25,7 @@ namespace WebKrpcApi
             });
 
             // Adiciona o contexto do banco de dados com Entity Framework
-            builder.Services.AddDbContext<WebKrpcApiDBContext>(options =>
+            builder.Services.AddDbContext<WebXantaquaApiDBContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Configuração específica da API registrada em outro arquivo

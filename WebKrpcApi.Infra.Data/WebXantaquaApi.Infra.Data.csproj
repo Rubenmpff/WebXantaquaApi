@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebKrpcApi.Domain\WebKrpcApi.Domain.csproj" />
+    <ProjectReference Include="..\WebKrpcApi.Domain\WebXantaquaApi.Domain.csproj" />
   </ItemGroup>
 
 </Project>

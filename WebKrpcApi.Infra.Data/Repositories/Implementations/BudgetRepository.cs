@@ -9,10 +9,10 @@ namespace WebKrpcApi.Infra.Data.Repositories.Implementations
 {
     public class BudgetRepository : IBudgetRepository
     {
-        private readonly WebKrpcApiDBContext _context;
+        private readonly WebXantaquaApiDBContext _context;
         private readonly DbSet<Budget> _dbSet;
 
-        public BudgetRepository(WebKrpcApiDBContext context)
+        public BudgetRepository(WebXantaquaApiDBContext context)
         {
             _context = context;
             _dbSet = context.Set<Budget>();
