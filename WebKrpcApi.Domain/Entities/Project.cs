@@ -1,36 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-
-// Representa um projeto associado a um cliente.
 public class Project
 {
-    public int Id { get; set; } // Identificador único do projeto.
-    public string Name { get; set; } // Nome ou título do projeto.
-    public string Description { get; set; } // Descrição detalhada do projeto.
-    public ProjectStatus Status { get; set; } // Status atual do projeto.
-    public DateTime StartDate { get; set; } // Data de início do projeto.
-    public DateTime? EstimatedEndDate { get; set; } // Data estimada para a conclusão do projeto, pode ser nula se não estiver definida.
+    public int Id { get; set; }
 
-    public int ClientId { get; set; } // Chave estrangeira que referencia o cliente do projeto.
-    public Client Client { get; set; } // Propriedade de navegação para o cliente associado.
-    public ICollection<Budget> Budgets { get; set; } = new List<Budget>(); // Coleção de orçamentos relacionados a este projeto.
+    [Required]
+    [StringLength(200, ErrorMessage = "O nome do projeto deve ter no máximo 200 caracteres.")]
+    public string Name { get; set; }
 
-    // Construtor para criar um projeto com informações iniciais.
+    [Required]
+    [StringLength(1000, ErrorMessage = "A descrição do projeto deve ter no máximo 1000 caracteres.")]
+    public string Description { get; set; }
+
+    public ProjectStatus Status { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime? EstimatedEndDate { get; set; }
+
+    public string ClientId { get; set; }
+    public Client Client { get; set; }
+    public ICollection<Budget> Budgets { get; set; } = new List<Budget>();
+    public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+    public DateTime CreatedAt { get; set; }
+    public DateTime LastUpdated { get; set; }
+    public ProjectPriority Priority { get; set; }
+
     public Project(string name, string description, DateTime startDate)
     {
         Name = name;
         Description = description;
         StartDate = startDate;
-        Status = ProjectStatus.Planning; // Status inicial do projeto definido como Planejamento.
+        Status = ProjectStatus.Planning;
+        CreatedAt = DateTime.UtcNow;
+        LastUpdated = DateTime.UtcNow;
+        Priority = ProjectPriority.Medium;
+    }
+
+    public Project() { }
+
+    public void UpdateStatus(ProjectStatus newStatus)
+    {
+        Status = newStatus;
+        LastUpdated = DateTime.UtcNow;
+
+        if (newStatus == ProjectStatus.Completed || newStatus == ProjectStatus.Canceled)
+        {
+            SendStatusChangeNotification(newStatus);
+        }
+    }
+
+    private void SendStatusChangeNotification(ProjectStatus status)
+    {
+        // Implemente sua lógica de notificação aqui.
+        Console.WriteLine($"Notificação enviada: O status do projeto foi alterado para {status}.");
     }
 }
 
-// Define os possíveis estados de um projeto.
 public enum ProjectStatus
 {
-    Planning, // Planejamento
-    InProgress, // Em andamento
-    Completed, // Concluído
-    Canceled // Cancelado
+    Planning,
+    InProgress,
+    Completed,
+    Canceled
+}
+
+public enum ProjectPriority
+{
+    Low,
+    Medium,
+    High
 }

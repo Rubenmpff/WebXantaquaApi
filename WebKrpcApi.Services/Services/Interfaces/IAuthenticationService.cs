@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
 using WebKrpcApi.Services.Mapping.Dtos;
 
-public interface IAuthenticationService
+namespace WebKrpcApi.Services.Services.Interfaces
 {
-    Task<Client> FindByEmailAsync(string email);
-    Task<Client> RegisterClientAsync(RegisterDto registerDto);
-    Task<bool> CheckPasswordAsync(Client client, string password);
-    Task<string> GenerateJwtToken(Client client);
+    public interface IAuthenticationService
+    {
+        Task<AuthenticationResultDto> RegisterAsync(RegisterDto userForRegistration);
+        Task<AuthenticationResultDto> LoginAsync(LoginDto userForLogin);
+    }
 }

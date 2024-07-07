@@ -1,6 +1,4 @@
-﻿
-using AutoMapper;
-using Krpc.Data.Context;
+﻿using AutoMapper;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebKrpcApi.Infra.Data.Repositories.Interfaces;
@@ -13,54 +11,47 @@ namespace WebKrpcApi.Services.Services.Implementations
     {
         private readonly IMapper _mapper;
         private readonly IBudgetRepository _repository;
-        private readonly WebKrpcApiDBContext _context;
 
-        public BudgetService(IMapper mapper, IBudgetRepository repository, WebKrpcApiDBContext context)
+        public BudgetService(IMapper mapper, IBudgetRepository repository)
         {
             _mapper = mapper;
-            _context = context;
             _repository = repository;
         }
 
         public async Task<List<BudgetDto>> GetAll()
         {
-            List<Budget> budgets = await _repository.GetAll();
+            var budgets = await _repository.GetAll();
             return _mapper.Map<List<BudgetDto>>(budgets);
         }
 
         public async Task<BudgetDto> GetById(int id)
         {
-
-            Budget budget = await _repository.GetById(id);
+            var budget = await _repository.GetById(id);
+            if (budget == null)
+            {
+                throw new KeyNotFoundException("Budget not found.");
+            }
             return _mapper.Map<BudgetDto>(budget);
-
         }
 
         public async Task<BudgetDto> Save(BudgetDto budgetDto)
         {
-            Budget budget = _mapper.Map<Budget>(budgetDto);
-
-            if (budgetDto.Id > 0)
+            var budget = _mapper.Map<Budget>(budgetDto);
+            if (budget.Id > 0)
             {
-                _repository.Update(budget);
+                await _repository.UpdateAsync(budget);
             }
             else
             {
-                _repository.Add(budget);
+                await _repository.AddAsync(budget);
             }
-
-            await _context.SaveChangesAsync();
-
             return _mapper.Map<BudgetDto>(budget);
         }
 
         public async Task Delete(BudgetDto budgetDto)
         {
-            Budget budget = _mapper.Map<Budget>(budgetDto);
-
-            _repository.Delete(budget);
-
-            await _context.SaveChangesAsync();
+            var budget = _mapper.Map<Budget>(budgetDto);
+            await _repository.DeleteAsync(budget);
         }
     }
 }

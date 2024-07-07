@@ -1,5 +1,6 @@
 ﻿using Krpc.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebKrpcApi.Infra.Data.Repositories.Interfaces;
@@ -8,43 +9,44 @@ namespace WebKrpcApi.Infra.Data.Repositories.Implementations
 {
     public class ClientRepository : IClientRepository
     {
-        protected WebKrpcApiDBContext _webKrpcApiDBContext;
-        protected DbSet<Client> _dbSet;
+        private readonly WebKrpcApiDBContext _context;
+        private readonly DbSet<Client> _dbSet;
 
-        public ClientRepository(WebKrpcApiDBContext webKrpcApiDBContext)
+        public ClientRepository(WebKrpcApiDBContext context)
         {
-            _webKrpcApiDBContext = webKrpcApiDBContext;
-            _dbSet = _webKrpcApiDBContext.Set<Client>();
+            _context = context;
+            _dbSet = context.Set<Client>();
         }
 
         public async Task<List<Client>> GetAll()
         {
-
-            return await _dbSet.ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Client> GetById(int id)
+        public async Task<Client> GetByEmail(string email)
         {
-
-            return await _dbSet.FindAsync(id);
+            return await _dbSet.AsNoTracking().SingleOrDefaultAsync(c => c.Email == email);
         }
 
-        public Client Add(Client client)
+        public async Task AddAsync(Client client)
         {
-            _dbSet.Add(client);
-            return client;
+            if (client == null) throw new ArgumentNullException(nameof(client));
+            await _dbSet.AddAsync(client);
+            await _context.SaveChangesAsync();
         }
 
-        public Client Update(Client client)
+        public async Task UpdateAsync(Client client)
         {
+            if (client == null) throw new ArgumentNullException(nameof(client));
             _dbSet.Update(client);
-            return client;
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Client client)
+        public async Task DeleteAsync(Client client)
         {
+            if (client == null) throw new ArgumentNullException(nameof(client));
             _dbSet.Remove(client);
+            await _context.SaveChangesAsync();
         }
-
     }
 }

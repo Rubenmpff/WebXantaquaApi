@@ -1,23 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-
-// Representa um cliente no sistema.
-public class Client
+public class Client : IdentityUser
 {
-    public int Id { get; set; }
+    [Required]
+    [StringLength(100, ErrorMessage = "O nome deve ter no máximo 100 caracteres.")]
     public string Name { get; set; }
-    public string Email { get; set; }
-    public string Phone { get; set; }
-    public string PasswordHash { get; set; } // Campo para armazenar o hash da senha
-    public bool IsAdmin { get; set; } // Campo para indicar se o usuário é um administrador
+
+    public bool IsAdmin { get; set; }
     public bool AgreedToTermsAndConditions { get; set; }
     public bool ConsentForAdvertising { get; set; }
+
+    public bool IsAuthorizedToComment { get; set; } = false; // Adiciona uma flag para indicar se o usuário pode comentar
+
     public ICollection<Project> Projects { get; set; } = new List<Project>();
 
-    public Client(string name, string email, string phone)
+    [Required]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
+
+    [EmailAddress(ErrorMessage = "O email inserido não é válido.")]
+    public override string Email { get; set; }
+
+    [Phone(ErrorMessage = "O número de telefone inserido não é válido.")]
+    public override string PhoneNumber { get; set; }
+
+    public Client() { }
+
+    public Client(string name, string email, string phoneNumber)
     {
-        Name = name;
+        UserName = email; // UserName é geralmente usado como um identificador único no Identity
         Email = email;
-        Phone = phone;
+        PhoneNumber = phoneNumber;
+        Name = name;
+        CreatedAt = DateTime.UtcNow;
+        LastUpdated = DateTime.UtcNow;
     }
 }

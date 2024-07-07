@@ -7,12 +7,8 @@ namespace WebKrpcApi.Services.Services.Interfaces
     public interface IClientService
     {
         Task<List<ClientDto>> GetAll();
-
-        Task<ClientDto> GetById(int id);
-
+        Task<ClientDto> GetByEmail(string email);
         Task<ClientDto> Save(ClientDto clientDto);
-
         Task Delete(ClientDto clientDto);
-
     }
 }

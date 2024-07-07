@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebKrpcApi.Services.Mapping.Dtos;
@@ -6,8 +7,9 @@ using WebKrpcApi.Services.Services.Interfaces;
 
 namespace WebKrpcApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("WebKrpcApi/[controller]")]
     [ApiController]
+    [Authorize] // Protege todos os métodos do controlador
     public class ProjectController : ControllerBase
     {
         private readonly IProjectService _service;
@@ -32,7 +34,7 @@ namespace WebKrpcApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProjectDto>> GetProject(int id)
+        public async Task<ActionResult<ProjectDto>> GetById(int id)
         {
             try
             {
@@ -57,7 +59,7 @@ namespace WebKrpcApi.Controllers
             try
             {
                 var createdProject = await _service.Save(projectDto);
-                return CreatedAtAction(nameof(GetProject), new { id = createdProject.Id }, createdProject);
+                return CreatedAtAction(nameof(GetById), new { id = createdProject.Id }, createdProject);
             }
             catch (System.Exception)
             {

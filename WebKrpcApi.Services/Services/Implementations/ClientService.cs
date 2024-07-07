@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Krpc.Data.Context;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebKrpcApi.Infra.Data.Repositories.Interfaces;
@@ -12,54 +11,46 @@ namespace WebKrpcApi.Services.Services.Implementations
     {
         private readonly IMapper _mapper;
         private readonly IClientRepository _repository;
-        private readonly WebKrpcApiDBContext _context;
 
-        public ClientService(IMapper mapper, IClientRepository repository, WebKrpcApiDBContext context)
+        public ClientService(IMapper mapper, IClientRepository repository)
         {
             _mapper = mapper;
-            _context = context;
             _repository = repository;
         }
 
         public async Task<List<ClientDto>> GetAll()
         {
-            List<Client> clients = await _repository.GetAll();
+            var clients = await _repository.GetAll();
             return _mapper.Map<List<ClientDto>>(clients);
         }
 
-        public async Task<ClientDto> GetById(int id)
+        public async Task<ClientDto> GetByEmail(string email)
         {
-
-            Client client = await _repository.GetById(id);
+            var client = await _repository.GetByEmail(email);
+            if (client == null) throw new KeyNotFoundException("Cliente não encontrado.");
             return _mapper.Map<ClientDto>(client);
-
         }
 
         public async Task<ClientDto> Save(ClientDto clientDto)
         {
-            Client client = _mapper.Map<Client>(clientDto);
-
-            if(clientDto.Id > 0)
+            var client = _mapper.Map<Client>(clientDto);
+            var existingClient = await _repository.GetByEmail(client.Email);
+            if (existingClient != null)
             {
-                _repository.Update(client);
+                client.Id = existingClient.Id; // Certifique-se de que o ID está sendo mantido para atualização.
+                await _repository.UpdateAsync(client);
             }
             else
             {
-                _repository.Add(client);
+                await _repository.AddAsync(client);
             }
-
-            await _context.SaveChangesAsync();
-
             return _mapper.Map<ClientDto>(client);
         }
 
         public async Task Delete(ClientDto clientDto)
         {
-            Client client = _mapper.Map<Client>(clientDto);
-
-            _repository.Delete(client);
-
-            await _context.SaveChangesAsync();
+            var client = _mapper.Map<Client>(clientDto);
+            await _repository.DeleteAsync(client);
         }
     }
 }

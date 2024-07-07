@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using WebKrpcApi.Services.Mapping.Dtos;
 using WebKrpcApi.Services.Services.Interfaces;
 
 namespace WebKrpcApi.Controllers
 {
+    [Route("WebKrpcApi/[controller]")]
+    [ApiController]
+    [Authorize] // Protege todos os métodos do controlador
     public class EmailController : ControllerBase
     {
         private readonly IEmailService _emailService;
@@ -27,4 +31,3 @@ namespace WebKrpcApi.Controllers
         }
     }
 }
-

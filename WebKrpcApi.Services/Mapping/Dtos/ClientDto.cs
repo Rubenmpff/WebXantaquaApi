@@ -1,26 +1,32 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebKrpcApi.Services.Mapping.Dtos
 {
-
     // Representa um cliente no sistema.
     public class ClientDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        [Required(ErrorMessage = "O campo Email é obrigatório.")]
+        [EmailAddress(ErrorMessage = "Formato de e-mail inválido.")]
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "O campo Nome é obrigatório.")]
+        [StringLength(100, ErrorMessage = "O nome deve ter no máximo 100 caracteres.")]
+        public string Name { get; set; }
+
+        [Phone(ErrorMessage = "Número de telefone inválido.")]
         public string Phone { get; set; }
+
         public bool AgreedToTermsAndConditions { get; set; }
         public bool ConsentForAdvertising { get; set; }
-        public string Password { get; set; }  // Usado apenas para login e registro
-        public string Token { get; set; }  // JWT token para autenticação
 
-
-        // Uma lista de IDs de projetos em vez de objetos de projeto completos
+        // Lista de IDs de projetos associados ao cliente.
         public List<int> ProjectIds { get; set; } = new List<int>();
 
+        // Construtor sem parâmetros
+        public ClientDto() { }
 
-        // Construtor para facilitar a criação de um novo cliente com informações básicas.
+        // Construtor com parâmetros para facilitar a criação de um novo cliente.
         public ClientDto(string name, string email, string phone)
         {
             Name = name;

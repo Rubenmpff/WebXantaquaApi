@@ -1,32 +1,58 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-
-// Representa um orçamento dentro de um projeto.
 public class Budget
 {
-    public int Id { get; set; } // Identificador único do orçamento.
-    public string Description { get; set; } // Descrição dos itens ou serviços orçamentados.
-    public decimal TotalValue { get; set; } // Valor total estimado para o orçamento.
-    public DateTime ValidUntil { get; set; } // Data até a qual o orçamento é válido.
-    public BudgetStatus Status { get; set; } = BudgetStatus.Pending; // Status inicial do orçamento, definido como Pendente.
+    public int Id { get; set; }
 
-    public int ProjectId { get; set; } // Chave estrangeira que referencia o projeto associado.
-    public Project Project { get; set; } // Propriedade de navegação para o projeto relacionado.
+    [Required(ErrorMessage = "A descrição do orçamento é obrigatória.")]
+    [StringLength(500, ErrorMessage = "A descrição não deve exceder 500 caracteres.")]
+    public string Description { get; set; }
 
-    // Construtor para criar um orçamento com detalhes básicos.
+    [Range(0.01, double.MaxValue, ErrorMessage = "O valor total deve ser maior que zero.")]
+    public decimal TotalValue { get; set; }
+
+    [Required]
+    public DateTime ValidUntil { get; set; }
+
+    public BudgetStatus Status { get; set; } = BudgetStatus.Pending;
+
+    public int ProjectId { get; set; }
+    public Project Project { get; set; }
+
+    [Required]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
+
     public Budget(string description, decimal totalValue, DateTime validUntil)
     {
         Description = description;
         TotalValue = totalValue;
         ValidUntil = validUntil;
     }
+
+    public Budget() { }
+
+    public void UpdateStatus(BudgetStatus newStatus)
+    {
+        if ((newStatus == BudgetStatus.Sent && Status == BudgetStatus.Pending) ||
+            (newStatus == BudgetStatus.Approved && Status == BudgetStatus.Sent) ||
+            (newStatus == BudgetStatus.Rejected && Status != BudgetStatus.Approved))
+        {
+            Status = newStatus;
+            LastUpdated = DateTime.UtcNow;
+        }
+        else
+        {
+            throw new InvalidOperationException("Transição de status inválida.");
+        }
+    }
 }
 
-// Define os possíveis estados de um orçamento.
 public enum BudgetStatus
 {
-    Pending, // Pendente
-    Sent, // Enviado
-    Approved, // Aprovado
-    Rejected // Rejeitado
+    Pending,
+    Sent,
+    Approved,
+    Rejected
 }

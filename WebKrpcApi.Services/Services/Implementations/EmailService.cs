@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-using SendGrid;
+﻿using SendGrid;
 using SendGrid.Helpers.Mail;
+using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using WebKrpcApi.Services.Mapping.Dtos;
 using WebKrpcApi.Services.Services.Interfaces;
+using System;
+using WebKrpcApi.Services.Validator;
 
 namespace WebKrpcApi.Services.Services.Implementations
 {
@@ -14,16 +16,42 @@ namespace WebKrpcApi.Services.Services.Implementations
 
         public EmailService(IConfiguration configuration)
         {
-            var apiKey = configuration["SendGridApiKey"]; // A chave é carregada do Azure Key Vault automaticamente
+            var apiKey = configuration["SendGrid:ApiKey"];
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                throw new InvalidOperationException("A chave da API do SendGrid não está configurada.");
+            }
+
+            var fromEmail = configuration["SendGrid:FromEmail"] ?? "info@yourcompany.com";
+            var fromName = configuration["SendGrid:FromName"] ?? "Your Company Name";
+
             _client = new SendGridClient(apiKey);
-            _fromAddress = new EmailAddress("info@yourcompany.com", "Your Company Name");
+            _fromAddress = new EmailAddress(fromEmail, fromName);
         }
 
         public async Task SendEmailAsync(EmailRequest emailRequest)
         {
             var to = new EmailAddress(emailRequest.To);
+            if (!EmailValidator.IsValidEmail(to.Email))
+            {
+                throw new ArgumentException("O endereço de e-mail fornecido é inválido.");
+            }
+
             var msg = MailHelper.CreateSingleEmail(_fromAddress, to, emailRequest.Subject, emailRequest.Body, null);
-            await _client.SendEmailAsync(msg);
+
+            try
+            {
+                var response = await _client.SendEmailAsync(msg);
+                if (!response.IsSuccessStatusCode)
+                {
+                    // Logar o código de resposta e a resposta
+                }
+            }
+            catch (Exception)
+            {
+                // Logar a exceção
+                throw; // Ou lidar de outra forma adequada
+            }
         }
     }
 }
