@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebKrpcApi.Infra.CrossCutting\WebXantaquaApi.Infra.CrossCutting.csproj" />
+    <ProjectReference Include="..\WebXantaquaApi.Infra.CrossCutting\WebXantaquaApi.Infra.CrossCutting.csproj" />
   </ItemGroup>
 
 </Project>

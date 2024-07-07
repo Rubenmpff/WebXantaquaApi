@@ -11,6 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebKrpcApi.Services\WebXantaquaApi.Services.csproj" />
+    <ProjectReference Include="..\WebXantaquaApi.Services\WebXantaquaApi.Services.csproj" />
   </ItemGroup>
 </Project>
